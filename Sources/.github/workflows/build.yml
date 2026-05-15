@@ -1,0 +1,24 @@
+name: Build iOS App
+on: [push]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Project
+        run: xcodegen generate
+      - name: Build App
+        run: xcodebuild -project YTPlayer.xcodeproj -scheme YTPlayer -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO -derivedDataPath build
+      - name: Package IPA
+        run: |
+          cd build/Build/Products/Release-iphoneos
+          mkdir Payload
+          mv YTPlayer.app Payload/
+          zip -r YTPlayer.ipa Payload
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: YTPlayer-IPA
+          path: build/Build/Products/Release-iphoneos/YTPlayer.ipa
