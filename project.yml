@@ -1,1 +1,15 @@
-
+name: YTPlayer
+options:
+  bundleIdPrefix: com.myname
+targets:
+  YTPlayer:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources: [Sources]
+    info:
+      path: Info.plist
+      properties:
+        UIBackgroundModes: [audio]
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
